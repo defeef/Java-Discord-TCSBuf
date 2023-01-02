@@ -32,7 +32,7 @@ public class Skip {
         AudioTrack track = player.getPlayingTrack();
 
         if (player.getPlayingTrack() == null) {
-            return Response.error("Nothing is currently playing");
+            return Response.ERROR("Nothing is currently playing");
         }
 
         AudioChannel audioChannel = audioManager.getConnectedChannel();
@@ -62,9 +62,9 @@ public class Skip {
         if(skips.get(track).size()>=skipsNeeded) {
             skips.remove(track);
             scheduler.nextTrack();
-            return Response.success(":arrow_right: Skipping the current track");
+            return Response.OK(":arrow_right: Skipping the current track");
         } else {
-            return Response.success(String.format(
+            return Response.OK(String.format(
                     ":arrow_right: Skips (%s/%s) for skipping current track. Use the command fskip to force skip.",
                     skips.get(track).size(),
                     skipsNeeded

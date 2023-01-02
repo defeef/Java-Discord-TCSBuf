@@ -18,14 +18,14 @@ public class Join {
         boolean hasDJ = MusicPermissions.hasDJ(sender);
 
         if (audioManager.isConnected() && !hasDJ) {
-            return Response.error("I'm already connected to a channel");
+            return Response.ERROR("I'm already connected to a channel");
         }
 
         GuildVoiceState memberVoiceState = sender.getVoiceState();
 
         assert memberVoiceState != null;
         if (!memberVoiceState.inAudioChannel()) {
-            return Response.error("Please join a voice channel first");
+            return Response.ERROR("Please join a voice channel first");
         }
 
         AudioChannel audioChannel = memberVoiceState.getChannel();
@@ -33,7 +33,7 @@ public class Join {
 
         assert audioChannel != null;
         if (!selfMember.hasPermission(audioChannel, Permission.VOICE_CONNECT)) {
-            return Response.error("I am missing permission to join " +audioChannel);
+            return Response.ERROR("I am missing permission to join " +audioChannel);
         }
 
         audioManager.openAudioConnection(audioChannel);
@@ -41,7 +41,7 @@ public class Join {
         GuildMusicManager musicManager = playerManager.getGuildMusicManager(guild);
         musicManager.autoLeaveManager.startTimeout(guild);
 
-        return Response.success("Joining your voice channel");
+        return Response.OK("Joining your voice channel");
     }
 
 }

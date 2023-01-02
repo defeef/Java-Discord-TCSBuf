@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 public class Bee implements ICommand {
 
     @Override
-    public Response execute(MessageChannelUnion channel, Member sender, String[] args) {
+    public Response execute(MessageChannelUnion channel, Member sender, Object[] args) {
         var script = """
             According to all known laws of aviation,
             there is no way a bee should be able to fly.

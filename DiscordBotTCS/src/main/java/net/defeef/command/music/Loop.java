@@ -21,26 +21,26 @@ public class Loop {
         AudioPlayer player = musicManager.player;
 
         if (player.getPlayingTrack() == null) {
-            return Response.error("Nothing is currently playing");
+            return Response.ERROR("Nothing is currently playing");
         }
 
         AudioChannel audioChannel = audioManager.getConnectedChannel();
 
         assert audioChannel != null;
         if (!audioChannel.getMembers().contains(sender)) {
-            return Response.error("You have to be in the same voice channel as me to use this command");
+            return Response.ERROR("You have to be in the same voice channel as me to use this command");
         }
 
         if(MusicPermissions.hasPermission(sender, audioChannel)) {
             boolean loop = !musicManager.scheduler.isLooped();
             musicManager.scheduler.setLooped(loop);
-            return Response.success(String.format(
+            return Response.OK(String.format(
                     "%s Looping %s.",
                     loop ? ":arrows_counterclockwise:" : ":arrow_forward:",
                     loop ? "enabled" : "disabled"
             ));
         } else {
-            return Response.error("You must be the only person in the VC or have the `DJ` role to do this");
+            return Response.ERROR("You must be the only person in the VC or have the `DJ` role to do this");
         }
 
     }

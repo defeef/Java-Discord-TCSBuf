@@ -23,14 +23,14 @@ public class NowPlaying {
         AudioPlayer player = musicManager.player;
 
         if (player.getPlayingTrack() == null) {
-            return Response.error("Nothing is currently playing");
+            return Response.ERROR("Nothing is currently playing");
         }
 
         AudioChannel audioChannel = audioManager.getConnectedChannel();
 
         assert audioChannel != null;
         if (!audioChannel.getMembers().contains(sender)) {
-            return Response.error("You have to be in the same voice channel as me to use this command");
+            return Response.ERROR("You have to be in the same voice channel as me to use this command");
         }
 
         AudioTrackInfo info = player.getPlayingTrack().getInfo();
@@ -49,7 +49,7 @@ public class NowPlaying {
                         player.getPlayingTrack().getUserData()
                 )).setThumbnail(imageURL);
 
-        return Response.success(builder.build());
+        return Response.OK(builder.build());
     }
 
     private String formatTime(long timeInMillis) {

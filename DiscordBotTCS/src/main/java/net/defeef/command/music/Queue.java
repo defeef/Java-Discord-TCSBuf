@@ -23,9 +23,9 @@ public class Queue {
         GuildMusicManager musicManager = playerManager.getGuildMusicManager(guild);
         MessageEmbed queue = getQueuePage(musicManager, 1);
         if(queue == null){
-            return Response.error("Queue is empty");
+            return Response.ERROR("Queue is empty");
         }
-        return Response.success(queue).addSecondaryButton("queue", "previous", "Previous").addSecondaryButton("queue", "next", "Next");
+        return Response.OK(queue).addSecondaryButton("queue", "previous", "Previous").addSecondaryButton("queue", "next", "Next");
     }
 
     public Response onButton(String id, Message message, Guild guild){
@@ -34,7 +34,7 @@ public class Queue {
         BlockingQueue<AudioTrack> queue = musicManager.scheduler.getQueue();
 
         try { Checks.hasPagedEmbed(message); }
-        catch (RuntimeException e) { return Response.error(e.getMessage()); }
+        catch (RuntimeException e) { return Response.ERROR(e.getMessage()); }
 
         int page = Integer.parseInt(message.getEmbeds().get(0).getFooter().getText().split("/")[0].substring(5));
         int pages = (queue.size()-1)/10+1;
@@ -44,9 +44,9 @@ public class Queue {
             page = page + 1 > pages ? 1 : page + 1;
         MessageEmbed embed = getQueuePage(musicManager, page);
         if(embed == null){
-            return Response.success("Queue is empty");
+            return Response.OK("Queue is empty");
         }
-        return Response.success(embed);
+        return Response.OK(embed);
     }
 
     private MessageEmbed getQueuePage(GuildMusicManager musicManager, int page){

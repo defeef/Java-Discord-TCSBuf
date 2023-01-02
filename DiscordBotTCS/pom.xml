@@ -52,5 +52,10 @@
             <artifactId>google-api-services-youtube</artifactId>
             <version>v3-rev20221108-2.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.33</version>
+        </dependency>
     </dependencies>
 </project>

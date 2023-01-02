@@ -21,7 +21,7 @@ public class Play {
         if(!isUrl(input)){
             String ytSearched = searchYoutube(input);
             if(ytSearched == null) {
-                return Response.error("Unable to find youtube video with a similar name");
+                return Response.ERROR("Unable to find youtube video with a similar name");
             }
             input = ytSearched;
         }
@@ -31,18 +31,18 @@ public class Play {
         if(!audioManager.isConnected()) {
             GuildVoiceState memberVoiceState = sender.getVoiceState();
             if (memberVoiceState == null || !memberVoiceState.inAudioChannel()) {
-                return Response.error("Please join a voice channel first");
+                return Response.ERROR("Please join a voice channel first");
             }
             AudioChannel audioChannel = memberVoiceState.getChannel();
             Member selfMember = guild.getSelfMember();
             assert audioChannel != null;
             if (!selfMember.hasPermission(audioChannel, Permission.VOICE_CONNECT)) {
-                return Response.error("I am missing permission to join "+audioChannel);
+                return Response.ERROR("I am missing permission to join "+audioChannel);
             }
             audioManager.openAudioConnection(audioChannel);
             manager.loadAndPlay(channel, input, sender.getUser());
         } else if(manager.getGuildMusicManager(guild).scheduler.isQueueLooped()) {
-            return Response.error("Queue is currently looped");
+            return Response.ERROR("Queue is currently looped");
         } else {
             GuildVoiceState memberVoiceState = sender.getVoiceState();
             assert memberVoiceState != null;
@@ -53,10 +53,10 @@ public class Play {
             if(voiceChannel.getIdLong() == selfVoiceChannel.getIdLong()) {
                 manager.loadAndPlay(channel, input, sender.getUser());
             } else {
-                return Response.error("You have to be in the same voice channel as me to use this command");
+                return Response.ERROR("You have to be in the same voice channel as me to use this command");
             }
         }
-        return Response.success(":arrow_forward: Queueing Track");
+        return Response.OK(":arrow_forward: Queueing Track");
     }
 
     private boolean isUrl(String input) {

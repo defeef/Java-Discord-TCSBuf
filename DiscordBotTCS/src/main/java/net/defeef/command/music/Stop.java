@@ -21,14 +21,14 @@ public class Stop {
         AudioPlayer player = musicManager.player;
 
         if (player.getPlayingTrack() == null) {
-            return Response.error("Nothing is currently playing");
+            return Response.ERROR("Nothing is currently playing");
         }
 
         AudioChannel audioChannel = audioManager.getConnectedChannel();
 
         assert audioChannel != null;
         if (!audioChannel.getMembers().contains(sender)) {
-            return Response.error("You have to be in the same voice channel as me to use this command");
+            return Response.ERROR("You have to be in the same voice channel as me to use this command");
         }
 
         if(MusicPermissions.hasPermission(sender, audioChannel)) {
@@ -38,9 +38,9 @@ public class Stop {
             musicManager.scheduler.unLoopQueue();
             musicManager.scheduler.setLooped(false);
             musicManager.autoLeaveManager.startTimeout(guild);
-            return Response.success("Stopped the music and cleared the song queue");
+            return Response.OK("Stopped the music and cleared the song queue");
         } else {
-            return Response.error("You must be the only person in the VC or have the `DJ` role to do this");
+            return Response.ERROR("You must be the only person in the VC or have the `DJ` role to do this");
         }
 
     }

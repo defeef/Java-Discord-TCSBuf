@@ -21,25 +21,25 @@ public class Resume {
         AudioPlayer player = musicManager.player;
 
         if (player.getPlayingTrack() == null) {
-            return Response.error("Nothing is currently playing");
+            return Response.ERROR("Nothing is currently playing");
         }
 
         if (!player.isPaused()) {
-            return Response.error("Track is already playing");
+            return Response.ERROR("Track is already playing");
         }
 
         AudioChannel audioChannel = audioManager.getConnectedChannel();
 
         assert audioChannel != null;
         if (!audioChannel.getMembers().contains(sender)) {
-            return Response.error("You have to be in the same voice channel as me to use this command");
+            return Response.ERROR("You have to be in the same voice channel as me to use this command");
         }
 
         if(MusicPermissions.hasPermission(sender, audioChannel)) {
             player.setPaused(false);
-            return Response.success(":arrow_forward: Resumed current track");
+            return Response.OK(":arrow_forward: Resumed current track");
         } else {
-            return Response.error("You must be the only person in the VC or have the `DJ` role to do this");
+            return Response.ERROR("You must be the only person in the VC or have the `DJ` role to do this");
         }
 
     }

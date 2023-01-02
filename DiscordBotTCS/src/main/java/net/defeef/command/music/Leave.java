@@ -15,21 +15,21 @@ public class Leave {
         AudioManager audioManager = guild.getAudioManager();
 
         if (!audioManager.isConnected()) {
-            return Response.error("I'm not connected to a voice channel");
+            return Response.ERROR("I'm not connected to a voice channel");
         }
 
         AudioChannel audioChannel = audioManager.getConnectedChannel();
 
         assert audioChannel != null;
         if (!audioChannel.getMembers().contains(sender)) {
-            return Response.error("You have to be in the same voice channel as me to use this command");
+            return Response.ERROR("You have to be in the same voice channel as me to use this command");
         }
 
         if(MusicPermissions.hasPermission(sender, audioChannel)) {
             audioManager.closeAudioConnection();
-            return Response.success("Disconnected from your channel");
+            return Response.OK("Disconnected from your channel");
         } else {
-            return Response.error("You must be the only person in the VC or have the `DJ` role to do this");
+            return Response.ERROR("You must be the only person in the VC or have the `DJ` role to do this");
         }
 
     }
