@@ -93,7 +93,7 @@ public class Config {
             throw new RuntimeException("Unable to finalize loading of config files.");
         }
 
-        this.saveConfig();
+        //this.saveConfig();
 
     }
 

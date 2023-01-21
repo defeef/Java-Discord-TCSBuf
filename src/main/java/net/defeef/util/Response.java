@@ -21,7 +21,7 @@ public class Response {
     }
 
     public static Response OK(String message) {
-        return new Response(Status.OK, "");
+        return new Response(Status.OK, message);
     }
 
     public static Response OK(MessageEmbed... embeds) {
