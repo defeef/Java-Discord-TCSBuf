@@ -4,9 +4,13 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.defeef.Main;
+import net.defeef.command.IButtonCallback;
+import net.defeef.command.ICommand;
 import net.defeef.util.Response;
 import net.defeef.music.GuildMusicManager;
 import net.defeef.music.PlayerManager;
@@ -16,9 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
-public class Queue {
+public class Queue implements ICommand, IButtonCallback {
 
-    public Response execute(Guild guild){
+    public Response execute(MessageChannelUnion channel, Member sender, Object[] args) {
+
+        Guild guild = sender.getGuild();
         PlayerManager playerManager = Main.getInstance().getPlayerManager();
         GuildMusicManager musicManager = playerManager.getGuildMusicManager(guild);
         MessageEmbed queue = getQueuePage(musicManager, 1);
@@ -28,7 +34,8 @@ public class Queue {
         return Response.OK(queue).addSecondaryButton("queue", "previous", "Previous").addSecondaryButton("queue", "next", "Next");
     }
 
-    public Response onButton(String id, Message message, Guild guild){
+    public Response onButton(MessageChannelUnion channel, Member sender, String id, Message message) {
+        Guild guild = sender.getGuild();
         PlayerManager playerManager = Main.getInstance().getPlayerManager();
         GuildMusicManager musicManager = playerManager.getGuildMusicManager(guild);
         BlockingQueue<AudioTrack> queue = musicManager.scheduler.getQueue();
@@ -77,4 +84,15 @@ public class Queue {
         return builder.build();
     }
 
+    @Override
+    public String getInvoke() {
+        // TODO Auto-generated method stub
+        return "queue";
+    }
+
+    @Override
+    public Object[] getArgs() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

@@ -63,25 +63,25 @@ public class Response {
 
     public Response addPrimaryButton(String callback, String id, String label){
         if(buttons == null) buttons = new ArrayList<>();
-        buttons.add(Button.primary(callback + "_" + id ,label));
+        buttons.add(Button.primary(callback + "_" + id, label));
         return this;
     }
 
     public Response addSecondaryButton(String callback, String id, String label){
         if(buttons == null) buttons = new ArrayList<>();
-        buttons.add(Button.secondary(callback + "_" + id ,label));
+        buttons.add(Button.secondary(callback + "_" + id, label));
         return this;
     }
 
     public Response addSuccessButton(String callback, String id, String label){
         if(buttons == null) buttons = new ArrayList<>();
-        buttons.add(Button.success(callback + "_" + id ,label));
+        buttons.add(Button.success(callback + "_" + id, label));
         return this;
     }
 
     public Response addDangerButton(String callback, String id, String label){
         if(buttons == null) buttons = new ArrayList<>();
-        buttons.add(Button.danger(callback + "_" + id ,label));
+        buttons.add(Button.danger(callback + "_" + id, label));
         return this;
     }
 

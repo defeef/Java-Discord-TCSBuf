@@ -51,5 +51,11 @@ public class ForceSkip implements ICommand {
     @Override
     public String getInvoke() {
         return "fskip";
-    }    
+    }
+
+    @Override
+    public Object[] getArgs() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

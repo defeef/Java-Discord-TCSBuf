@@ -3,10 +3,12 @@ package net.defeef.command.music;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.defeef.Main;
+import net.defeef.command.ICommand;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.managers.AudioManager;
 import net.defeef.util.Response;
 import net.defeef.music.GuildMusicManager;
@@ -18,12 +20,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Skip {
+public class Skip implements ICommand {
 
     private final Map<AudioTrack, List<String>> skips = new HashMap<>();
 
-    public Response execute(Member sender, GuildMessageChannel channel, Guild guild, List<Object> args) {
+    public Response execute(MessageChannelUnion channel, Member sender, Object[] args) {
 
+        Guild guild = sender.getGuild();
         AudioManager audioManager = guild.getAudioManager();
         PlayerManager playerManager = Main.getInstance().getPlayerManager();
         GuildMusicManager musicManager = playerManager.getGuildMusicManager(guild);
@@ -73,4 +76,15 @@ public class Skip {
 
     }
 
+    @Override
+    public String getInvoke() {
+        // TODO Auto-generated method stub
+        return "skip";
+    }
+
+    @Override
+    public Object[] getArgs() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

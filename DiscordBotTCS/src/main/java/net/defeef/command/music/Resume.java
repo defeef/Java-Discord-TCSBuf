@@ -2,19 +2,22 @@ package net.defeef.command.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.managers.AudioManager;
 import net.defeef.Main;
+import net.defeef.command.ICommand;
 import net.defeef.util.Response;
 import net.defeef.music.GuildMusicManager;
 import net.defeef.music.MusicPermissions;
 import net.defeef.music.PlayerManager;
 
-public class Resume {
+public class Resume implements ICommand {
 
-    public Response execute(Member sender, Guild guild) {
+    public Response execute(MessageChannelUnion channel, Member sender, Object[] args) {
 
+        Guild guild = sender.getGuild();
         AudioManager audioManager = guild.getAudioManager();
         PlayerManager playerManager = Main.getInstance().getPlayerManager();
         GuildMusicManager musicManager = playerManager.getGuildMusicManager(guild);
@@ -44,4 +47,15 @@ public class Resume {
 
     }
 
+    @Override
+    public String getInvoke() {
+        // TODO Auto-generated method stub
+        return "resume";
+    }
+
+    @Override
+    public Object[] getArgs() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

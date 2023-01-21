@@ -21,4 +21,10 @@ public class Bee implements ICommand {
     public String getInvoke() {
         return "bee";
     }
+
+    @Override
+    public Object[] getArgs() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

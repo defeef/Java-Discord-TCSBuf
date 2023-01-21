@@ -1,5 +1,6 @@
 package net.defeef;
 
+import net.defeef.command.Responder;
 import net.defeef.command.Bee;
 import net.defeef.command.ICommand;
 import net.defeef.command.Ping;
@@ -9,12 +10,15 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.requests.restaction.WebhookMessageCreateAction;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 import java.awt.*;
@@ -50,14 +54,14 @@ public class Main {
                         GatewayIntent.GUILD_MEMBERS,
                         GatewayIntent.GUILD_MESSAGES,
                         GatewayIntent.MESSAGE_CONTENT)
-                .addEventListeners(new Listener("$"))
                 .build()
                 .awaitReady();
+        this.jda.addEventListener(new Responder());
         try {
             this.youTube = new YouTube.Builder(
-                GoogleNetHttpTransport.newTrustedTransport(),
-                GsonFactory.getDefaultInstance(),
-                null).setApplicationName("DiscordBot").build();
+            GoogleNetHttpTransport.newTrustedTransport(),
+            GsonFactory.getDefaultInstance(),
+            null).setApplicationName("DiscordBot").build();
         } catch (Exception e) {
             throw new RuntimeException("Unable to connect with YouTube API");
         }
@@ -99,66 +103,4 @@ public class Main {
         return getClass().getClassLoader().getResourceAsStream(filename);
     }
 
-}
-
-class Listener extends ListenerAdapter {
-    private final String prefix;
-    private final Map<String, ICommand> commands;
-
-    public Listener(String prefix) {
-        this.prefix = prefix;
-        commands = new HashMap<>();
-        registerCommand(new Bee());
-        registerCommand(new Ping());
-    }
-
-    public void registerCommand(ICommand command) {
-        if (!commands.containsKey(command.getInvoke())) {
-            commands.put(command.getInvoke(), command);
-        }
-    }
-
-    @Override
-    public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-        if (!event.isFromGuild()) return;
-        var invoke = event.getName().toLowerCase();
-        ICommand command = commands.get(invoke);
-        List<Object> args = getOptions(event.getOptions());
-        Response response = command.execute(
-                event.getChannel(),
-                event.getMember(),
-                args.toArray()
-        );
-        if (response.getStatus() == Response.Status.ERROR) {
-            event.getChannel().sendMessageEmbeds(
-                    new EmbedBuilder()
-                        .setTitle(":x: Error")
-                        .setDescription(response.getMessage())
-                        .setColor(Color.RED)
-                        .build()
-            ).queue();
-        } else {
-            event.getChannel().sendMessage(response.getMessage()).queue();
-        }
-    }
-
-    private List<Object> getOptions(List<OptionMapping> options){
-        List<Object> args = new ArrayList<>();
-        options.forEach(option -> {
-            switch (option.getType()) {
-                case STRING -> args.add(option.getAsString());
-                case INTEGER -> args.add(option.getAsInt());
-                case NUMBER -> args.add(option.getAsDouble());
-                case BOOLEAN -> args.add(option.getAsBoolean());
-                case USER -> args.add(option.getAsMember());
-                case CHANNEL -> args.add(option.getAsChannel());
-                case ROLE -> args.add(option.getAsRole());
-                case MENTIONABLE -> args.add(option.getAsMentionable());
-                case ATTACHMENT -> args.add(option.getAsAttachment());
-                default -> {
-                }
-            }
-        });
-        return args;
-    }
 }

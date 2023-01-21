@@ -5,19 +5,25 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.managers.AudioManager;
 import net.defeef.Main;
+import net.defeef.command.ICommand;
 import net.defeef.util.Response;
 import net.defeef.music.PlayerManager;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
-public class Play {
+public class Play implements ICommand {
 
-    public Response execute(Member sender, GuildMessageChannel channel, Guild guild, List<Object> args) {
+    public Response execute(MessageChannelUnion channel, Member sender, Object[] args) {
+
+        Guild guild = sender.getGuild();
         AudioManager audioManager = guild.getAudioManager();
-        String input = (String) args.get(0);
+        String input = (String) args[0];
         if(!isUrl(input)){
             String ytSearched = searchYoutube(input);
             if(ytSearched == null) {
@@ -40,7 +46,7 @@ public class Play {
                 return Response.ERROR("I am missing permission to join "+audioChannel);
             }
             audioManager.openAudioConnection(audioChannel);
-            manager.loadAndPlay(channel, input, sender.getUser());
+            manager.loadAndPlay((GuildMessageChannel) channel, input, sender.getUser());
         } else if(manager.getGuildMusicManager(guild).scheduler.isQueueLooped()) {
             return Response.ERROR("Queue is currently looped");
         } else {
@@ -51,7 +57,7 @@ public class Play {
             AudioChannel selfVoiceChannel = audioManager.getConnectedChannel();
             assert selfVoiceChannel != null;
             if(voiceChannel.getIdLong() == selfVoiceChannel.getIdLong()) {
-                manager.loadAndPlay(channel, input, sender.getUser());
+                manager.loadAndPlay((GuildMessageChannel) channel, input, sender.getUser());
             } else {
                 return Response.ERROR("You have to be in the same voice channel as me to use this command");
             }
@@ -87,5 +93,17 @@ public class Play {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public String getInvoke() {
+        // TODO Auto-generated method stub
+        return "play";
+    }
+
+    @Override
+    public Object[] getArgs() {
+        // TODO Auto-generated method stub
+        return new Object[]{"query", "YouTube vido URL or search query", OptionType.STRING, true};
     }
 }

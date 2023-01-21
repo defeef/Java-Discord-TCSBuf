@@ -3,9 +3,11 @@ package net.defeef.command.music;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.defeef.Main;
+import net.defeef.command.ICommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
+import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.managers.AudioManager;
 import net.defeef.util.Response;
 import net.defeef.music.GuildMusicManager;
@@ -13,10 +15,11 @@ import net.defeef.music.PlayerManager;
 
 import java.util.concurrent.TimeUnit;
 
-public class NowPlaying {
+public class NowPlaying implements ICommand {
 
-    public Response execute(Member sender, Guild guild) {
+    public Response execute(MessageChannelUnion channel, Member sender, Object[] args) {
 
+        Guild guild = sender.getGuild();
         AudioManager audioManager = guild.getAudioManager();
         PlayerManager playerManager = Main.getInstance().getPlayerManager();
         GuildMusicManager musicManager = playerManager.getGuildMusicManager(guild);
@@ -62,5 +65,17 @@ public class NowPlaying {
         } else {
             return String.format("%02d:%02d:%02d", hours, minutes, seconds);
         }
+    }
+
+    @Override
+    public String getInvoke() {
+        // TODO Auto-generated method stub
+        return "nowplaying";
+    }
+
+    @Override
+    public Object[] getArgs() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
