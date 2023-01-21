@@ -104,6 +104,6 @@ public class Play implements ICommand {
     @Override
     public Object[] getArgs() {
         // TODO Auto-generated method stub
-        return new Object[]{"query", "YouTube vido URL or search query", OptionType.STRING, true};
+        return new Object[]{"query", "YouTube video URL or search query", OptionType.STRING, true};
     }
 }

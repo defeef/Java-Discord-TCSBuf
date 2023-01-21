@@ -95,6 +95,7 @@ public class Responder extends ListenerAdapter {
         if (!event.getChannel().canTalk()) return;
         if (event.getMember() == null || event.getUser().isBot()) return;
         var invoke = event.getName().toLowerCase();
+        if (!commands.containsKey(invoke)) { return; }
         ICommand command = commands.get(invoke);
         List<Object> args = getOptions(event.getOptions());
         net.defeef.util.Response response = command.execute(
@@ -102,6 +103,7 @@ public class Responder extends ListenerAdapter {
                 event.getMember(),
                 args.toArray()
         );
+        event.deferReply().queue();
         reply(response, event.getHook());
     }
 

@@ -47,7 +47,7 @@ public class Main {
         Main.instance = this;
         this.playerManager = new PlayerManager();
         this.config = Config.create("config.yml");
-        this.jda = JDABuilder.createDefault(args[0])
+        this.jda = JDABuilder.createDefault(config.getString("botToken"))
                 .setActivity(Activity.playing("vim"))
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .enableIntents(
