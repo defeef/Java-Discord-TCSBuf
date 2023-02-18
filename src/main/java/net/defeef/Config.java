@@ -208,7 +208,7 @@ public class Config {
                         i++;
                         if (index == -1) break;
                     }
-                    if (index < 10)  continue;
+                    if (index < 0)  continue;
                     int start = yamlString.indexOf(' ', index);
                     int end = yamlString.indexOf('\n', index);
                     if (end == -1) end = yamlString.length();
